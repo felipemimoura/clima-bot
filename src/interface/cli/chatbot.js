@@ -13,6 +13,16 @@ export class Chatbot {
     console.log('[1] Consultar clima');
     console.log('[2] Sair');
     const option = await this.rl.question('Escolha uma opção: ');
+
+    if (option === '1') {
+      // Perguntar a cidade
+    } else if (option === '2') {
+      console.log('Ate mais');
+      this.rl.close();
+      process.exit();
+    } else {
+      console.log('Opção Invalida');
+    }
     return option;
   }
 }
