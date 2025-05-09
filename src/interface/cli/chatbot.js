@@ -16,6 +16,9 @@ export class Chatbot {
 
     if (option === '1') {
       // Perguntar a cidade
+      const city = await this.rl.question('Digite o nome da cidade: ');
+
+      //Buscar coordernadas
     } else if (option === '2') {
       console.log('Ate mais');
       this.rl.close();
