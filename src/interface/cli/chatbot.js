@@ -38,6 +38,18 @@ export class Chatbot {
       }
 
       const { lat, lon } = response.data[0];
+
+      //Buscar temperatura
+      const r = await axios.get('https://api.open-meteo.com/v1/forecast', {
+        params: {
+          latitude: lat,
+          longitude: lon,
+          current_weather: true
+        }
+      });
+      const temperature = r.data.current_weather?.temperature;
+
+      console.log(temperature);
     } else if (option === '2') {
       console.log('Ate mais');
       this.rl.close();
