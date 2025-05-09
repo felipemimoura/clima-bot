@@ -1,5 +1,6 @@
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
+import axios from 'axios';
 
 export class Chatbot {
   constructor() {
@@ -19,6 +20,24 @@ export class Chatbot {
       const city = await this.rl.question('Digite o nome da cidade: ');
 
       //Buscar coordernadas
+
+      const response = await axios.get(
+        'https://nominatim.openstreetmap.org/search',
+        {
+          params: {
+            q: city,
+            format: 'json',
+            limit: 1
+          },
+          headers: { 'User-Agent': 'chatbot-clima' }
+        }
+      );
+
+      if (!response.data[0]) {
+        throw new Error('Cidade não encontra');
+      }
+
+      const { lat, lon } = response.data[0];
     } else if (option === '2') {
       console.log('Ate mais');
       this.rl.close();
