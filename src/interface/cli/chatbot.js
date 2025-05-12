@@ -1,6 +1,7 @@
 import { stdin as input, stdout as output } from 'process';
 import readline from 'readline/promises';
 import { GetWeather } from '../../usecases/GetWeather.js';
+import { logger } from '../../shared/logger.js';
 
 export class Chatbot {
   constructor() {
@@ -9,6 +10,7 @@ export class Chatbot {
   }
 
   async start() {
+    logger.info('Iniciando chat...');
     const option = await this.buildMenu();
 
     if (option === '1') {
@@ -46,6 +48,7 @@ export class Chatbot {
         );
       } catch (err) {
         console.log(err);
+        logger.error(err, 'Erro ao consultar clima');
       }
 
       const nextStep = await this.rl.question(
