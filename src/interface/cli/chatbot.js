@@ -33,18 +33,38 @@ export class Chatbot {
   }
 
   async consultWeather() {
-    const city = await this.rl.question('Digite o nome da cidade: ');
-    const usecase = new GetWeather();
+    let continueLoop = true;
 
-    try {
-      const result = await usecase.execute(city);
-      console.log(
-        `A temperatura em ${result.city} é de ${result.temperature} °C`
+    while (continueLoop) {
+      const city = await this.rl.question('Digite o nome da cidade: ');
+      const usecase = new GetWeather();
+
+      try {
+        const result = await usecase.execute(city);
+        console.log(
+          `A temperatura em ${result.city} é de ${result.temperature} °C`
+        );
+      } catch (err) {
+        console.log(err);
+      }
+
+      const nextStep = await this.rl.question(
+        '\nO que você deseja fazer agora?\n[1] Consultar outra cidade\n[2] Voltar ao menu principal\n[3] Encerrar\nEscolha uma opção: '
       );
-    } catch (err) {
-      console.log(err);
-    }
 
-    //Buscar temperatura
+      if (nextStep === '1') {
+        continue;
+      } else if (nextStep === '2') {
+        continueLoop = false;
+        this.start();
+      } else if (nextStep === '3') {
+        console.log('👋 Até logo!');
+        this.rl.close();
+        process.exit(0);
+      } else {
+        console.log('Opção inválida. Retornando ao menu principal...');
+        continueLoop = false;
+      }
+    }
   }
 }
