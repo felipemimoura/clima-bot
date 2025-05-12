@@ -1,24 +1,12 @@
 import axios from 'axios';
+import { NominatimAPI } from '../infra/apis/NominatimAPI';
 
 export class GetWeather {
+  constructor() {
+    this.geoApi = new NominatimAPI();
+  }
   async execute(city) {
-    const cityData = await axios.get(
-      'https://nominatim.openstreetmap.org/search',
-      {
-        params: {
-          q: city,
-          format: 'json',
-          limit: 1
-        },
-        headers: { 'User-Agent': 'chatbot-clima' }
-      }
-    );
-
-    if (!cityData.data[0]) {
-      throw new Error('Cidade não encontra');
-    }
-
-    const { lat, lon } = cityData.data[0];
+    const { lat, lon } = await this.geoApi.getCoordinates(city);
 
     const responseWeather = await axios.get(
       'https://api.open-meteo.com/v1/forecast',
